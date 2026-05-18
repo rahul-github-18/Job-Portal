@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" style="height: 100%">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${jobDetails != null ? jobDetails.jobTitle + ' - TalentTrack' : 'Job Details - TalentTrack'}">Job Details - TalentTrack</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="description" content="Job Details and Application page on TalentTrack portal"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}"/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/font-awesome.min.css}"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+
+<body th:object="${jobDetails}" style="font-family: 'Inter', sans-serif; background-color: #f4f6f9; color: #2b3445; margin: 0; padding: 0;">
+
+<header th:replace="~{fragments/app-nav :: appNav}"></header>
+
+<div class="job-details-wrapper">
+    <style>
+        .job-details-wrapper {
+            max-width: 1040px;
+            margin: 0 auto;
+            padding: 30px 30px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* MAIN CONTENT */
+        .details-main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .btn-back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #4f6edb;
+            text-decoration: none !important;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: fit-content;
+        }
+
+        .btn-back-link:hover {
+            color: #0A1931;
+            transform: translateX(-4px);
+        }
+
+        /* PREMIUM JOB HEADER CARD */
+        .job-header-card {
+            background: white;
+            border-radius: 20px;
+            padding: 36px 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
+        }
+
+        .header-top-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            justify-content: space-between;
+        }
+
+        .company-info-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .company-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: #f0f4f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #4f6edb;
+            flex-shrink: 0;
+            box-shadow: 0 8px 20px rgba(79, 110, 219, 0.12);
+        }
+
+        .job-title-box h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0A1931;
+            margin: 0 0 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .company-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+        }
+
+        .company-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .company-meta-item i {
+            color: #fb4f14;
+        }
+
+        .badge-status-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .status-badge {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-badge.applied { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+        .status-badge.saved { background: rgba(251, 79, 20, 0.15); color: #fb4f14; }
+        .status-badge.active { background: rgba(79, 110, 219, 0.15); color: #4f6edb; }
+
+        .header-actions-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding-top: 25px;
+            border-top: 1px solid #f0f2f5;
+            align-items: center;
+        }
+
+        /* ACTION BUTTONS */
+        .btn-app-action {
+            height: 54px;
+            padding: 0 40px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none !important;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary-apply {
+            background: linear-gradient(90deg, #fb4f14 0%, #e74510 100%);
+            color: white;
+            box-shadow: 0 8px 20px rgba(251, 79, 20, 0.25);
+        }
+        .btn-primary-apply:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(251, 79, 20, 0.35); color: white; }
+
+        .btn-disabled {
+            background: #e2e8f0 !important;
+            color: #a0aec0 !important;
+            box-shadow: none !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
+        /* JOB SPECS GRID */
+        .job-specs-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .spec-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .spec-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .spec-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .spec-icon.salary { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+        .spec-icon.type { background: rgba(79, 110, 219, 0.15); color: #4f6edb; }
+        .spec-icon.remote { background: rgba(251, 79, 20, 0.15); color: #fb4f14; }
+        .spec-icon.date { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+        .spec-details h4 {
+            font-size: 13px;
+            color: #8d9ba8;
+            margin: 0 0 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .spec-details p {
+            font-size: 17px;
+            font-weight: 800;
+            color: #0A1931;
+            margin: 0;
+        }
+
+        /* SKILLS REQUIRED SECTION */
+        .skills-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+        }
+
+        .section-heading {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0A1931;
+            margin: 0 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-heading i { color: #fb4f14; }
+
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .skill-badge {
+            background: #f0f4f8;
+            color: #2b3445;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 14.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(79, 110, 219, 0.1);
+        }
+
+        .skill-badge i { color: #4f6edb; }
+        .skill-badge:hover { background: #4f6edb; color: white; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(79, 110, 219, 0.25); }
+        .skill-badge:hover i { color: white; }
+
+        /* JOB DESCRIPTION CARD */
+        .job-desc-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            line-height: 1.8;
+            font-size: 16px;
+            color: #4a5568;
+        }
+
+        .job-desc-card h3, .job-desc-card h4 {
+            color: #0A1931;
+            font-weight: 700;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+
+        .job-desc-card ul, .job-desc-card ol {
+            padding-left: 22px;
+            margin-bottom: 20px;
+        }
+
+        .job-desc-card li {
+            margin-bottom: 8px;
+        }
+
+        /* CANDIDATES APPLIED BOX (RECRUITER) */
+        .candidates-applied-box {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            margin-top: 30px;
+        }
+
+        .candidates-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0A1931;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .candidates-title i { color: #4f6edb; }
+
+        .candidates-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .candidate-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            text-decoration: none !important;
+            color: #2b3445;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: 1px solid #f0f2f5;
+        }
+
+        .candidate-item:hover {
+            transform: translateX(4px);
+            border-color: #4f6edb;
+            color: #4f6edb;
+        }
+
+        @media (max-width: 992px) {
+            .job-details-wrapper { padding: 15px 20px 40px; }
+            .header-top-row { flex-direction: column; gap: 20px; }
+            .company-info-group { flex-direction: column; gap: 16px; align-items: flex-start; }
+            .job-specs-grid { grid-template-columns: repeat(2, 1fr); }
+            .btn-app-action { width: 100%; justify-content: center; }
+        }
+        @media (max-width: 576px) {
+            .job-specs-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <!-- MAIN CONTENT -->
+    <main class="details-main">
+        <!-- BACK LINK -->
+        <a class="btn-back-link" id="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Search Results</a>
+
+        <!-- PREMIUM JOB HEADER CARD -->
+        <div class="job-header-card">
+            <div class="header-top-row">
+                <div class="company-info-group">
+                    <div class="company-avatar">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <div class="job-title-box">
+                        <h1 th:text="${jobDetails.jobTitle}">Software Engineer</h1>
+                        <div class="company-meta-row">
+                            <div class="company-meta-item">
+                                <i class="fa-solid fa-building-circle-check"></i>
+                                <span th:text="${jobDetails.jobCompanyId.name}">Company Name</span>
+                            </div>
+                            <div class="company-meta-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span th:text="${jobDetails.jobLocationId.city + ', ' + jobDetails.jobLocationId.state}">California, USA</span>
+                            </div>
+                            <div class="company-meta-item">
+                                <i class="fa-solid fa-briefcase"></i>
+                                <span th:text="${jobDetails.jobType != null ? jobDetails.jobType : 'Full-Time'}">Full-Time</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="badge-status-container" sec:authorize="hasAuthority('Job Seeker')">
+                    <div class="status-badge applied" th:if="${alreadyApplied == true}">
+                        <i class="fa-solid fa-circle-check"></i> Applied
+                    </div>
+                    <div class="status-badge saved" th:if="${alreadySaved == true}">
+                        <i class="fa-solid fa-bookmark"></i> Saved
+                    </div>
+                    <div class="status-badge active" th:if="${alreadyApplied == false && alreadySaved == false}">
+                        <i class="fa-solid fa-sparkles"></i> Actively Hiring
+                    </div>
+                </div>
+
+                <div class="badge-status-container" sec:authorize="hasAuthority('Recruiter')">
+                    <div class="status-badge active">
+                        <i class="fa-solid fa-circle-check"></i> Active Posting
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-actions-row">
+                <!-- JOB SEEKER ACTIONS -->
+                <div sec:authorize="hasAuthority('Job Seeker')" style="display: flex; width: 100%;">
+                    <form th:action="@{/job-details/apply/{id}(id=${jobDetails.jobPostId})}" method="post" style="margin: 0;">
+                        <button class="btn-app-action btn-primary-apply" type="submit" th:if="${alreadyApplied == false}">
+                            <i class="fa-solid fa-paper-plane"></i> Apply Now
+                        </button>
+                        <button class="btn-app-action btn-disabled" disabled th:if="${alreadyApplied == true}">
+                            <i class="fa-solid fa-circle-check"></i> Already Applied
+                        </button>
+                    </form>
+                </div>
+
+                <!-- RECRUITER ACTIONS -->
+                <div sec:authorize="hasAuthority('Recruiter')" style="display: flex; width: 100%;">
+                    <form th:action="@{/dashboard/edit/{id}(id=${jobDetails.jobPostId})}" method="post" style="margin: 0;">
+                        <button class="btn-app-action btn-primary-apply" type="submit">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit Job Posting
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOB SPECS GRID -->
+        <div class="job-specs-grid">
+            <div class="spec-card">
+                <div class="spec-icon salary"><i class="fa-solid fa-sack-dollar"></i></div>
+                <div class="spec-details">
+                    <h4>Salary / Stipend</h4>
+                    <p th:text="${jobDetails.salary != null ? jobDetails.salary : 'Not disclosed'}">$50k - $120k/yr</p>
+                </div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon type"><i class="fa-solid fa-business-time"></i></div>
+                <div class="spec-details">
+                    <h4>Job Type</h4>
+                    <p th:text="${jobDetails.jobType != null ? jobDetails.jobType : 'Full-Time'}">Full-Time</p>
+                </div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon remote"><i class="fa-solid fa-laptop-house"></i></div>
+                <div class="spec-details">
+                    <h4>Work Model</h4>
+                    <p th:text="${jobDetails.remote != null ? jobDetails.remote : 'Remote / Office'}">Remote</p>
+                </div>
+            </div>
+            <div class="spec-card">
+                <div class="spec-icon date"><i class="fa-solid fa-calendar-days"></i></div>
+                <div class="spec-details">
+                    <h4>Posted Date</h4>
+                    <p th:text="${jobDetails.postedDate != null ? #dates.format(jobDetails.postedDate, 'dd MMM yyyy') : 'Recently'}">12 Nov 2026</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SKILLS REQUIRED SECTION -->
+        <div class="skills-card">
+            <h3 class="section-heading"><i class="fa-solid fa-user-gear"></i> Skills & Expertise Required</h3>
+            <div class="skills-container">
+                <div class="skill-badge"><i class="fa-brands fa-java"></i> Java / J2EE</div>
+                <div class="skill-badge"><i class="fa-solid fa-leaf"></i> Spring Boot</div>
+                <div class="skill-badge"><i class="fa-solid fa-database"></i> PostgreSQL / MySQL</div>
+                <div class="skill-badge"><i class="fa-brands fa-react"></i> React / Angular</div>
+                <div class="skill-badge"><i class="fa-brands fa-html5"></i> HTML5 & CSS3</div>
+                <div class="skill-badge"><i class="fa-solid fa-network-wired"></i> RESTful APIs</div>
+                <div class="skill-badge"><i class="fa-brands fa-git-alt"></i> Git & GitHub</div>
+                <div class="skill-badge"><i class="fa-solid fa-arrows-split-up-and-left"></i> Agile / Scrum</div>
+            </div>
+        </div>
+
+        <!-- JOB DESCRIPTION CARD -->
+        <div class="job-desc-card">
+            <h3 class="section-heading"><i class="fa-solid fa-file-lines"></i> Full Job Description</h3>
+            <div th:utext="${jobDetails.descriptionOfJob}">
+                <!-- Fallback content if description is empty -->
+                <p>We are looking for a passionate Software Engineer to design, develop, and install high-quality software solutions. You will be part of a dynamic, fast-paced team working on enterprise-grade applications.</p>
+                <h4>Key Responsibilities:</h4>
+                <ul>
+                    <li>Write clean, scalable, and highly maintainable production code.</li>
+                    <li>Collaborate with cross-functional teams to define, design, and ship new features.</li>
+                    <li>Participate in full software development lifecycle including code reviews and architectural discussions.</li>
+                    <li>Identify bottlenecks, debug issues, and optimize application performance.</li>
+                </ul>
+                <h4>Requirements & Qualifications:</h4>
+                <ul>
+                    <li>Proven working experience in software engineering and web application development.</li>
+                    <li>Strong hands-on experience with Java, Spring Boot, and modern JavaScript frameworks.</li>
+                    <li>Excellent knowledge of relational databases (PostgreSQL/MySQL) and ORM technologies.</li>
+                    <li>Strong problem-solving skills and willingness to learn new technologies.</li>
+                </ul>
+            </div>
+
+            <!-- CANDIDATES APPLIED BOX (RECRUITER) -->
+            <div class="candidates-applied-box" sec:authorize="hasAuthority('Recruiter')" th:if="${applyList != null && !applyList.isEmpty()}">
+                <h4 class="candidates-title"><i class="fa-solid fa-users"></i> Candidates Applied for this Job</h4>
+                <div class="candidates-list">
+                    <a th:each="applyList : ${applyList}" th:href="@{/job-seeker-profile/{id}(id=${applyList.userId.userAccountId})}" class="candidate-item">
+                        <span th:text="${applyList.userId.displayName != null ? applyList.userId.displayName : 'Candidate Name'}">Candidate Name</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square" style="color: #a0b2c6;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/main.js}"></script>
+<script>
+    var element = document.getElementById('back-link');
+    if (element) {
+        element.setAttribute('href', document.referrer || '/dashboard/');
+        element.onclick = function() {
+            if (document.referrer) {
+                history.back();
+                return false;
+            } else {
+                window.location.href = '/dashboard/';
+                return false;
+            }
+        }
+    }
+</script>
+</body>
+</html>

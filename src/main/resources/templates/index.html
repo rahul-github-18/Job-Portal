@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Job Portal - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} " />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/font-awesome.min.css}" />
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+
+<body class="background home_page">
+    <main class="home_shell">
+        <!-- STICKY NAVBAR -->
+        <header th:replace="~{fragments/app-nav :: appNav}"></header>
+
+        <!-- PREMIUM HERO SECTION -->
+        <section class="home_hero premium_hero" aria-labelledby="homeHeroTitle">
+            <h1 id="homeHeroTitle">Discover Your Dream Career</h1>
+            <p>Explore over 10,000+ active jobs from top global companies and take the next step in your professional journey.</p>
+
+            <form class="home_nav_search premium_search" th:action="@{/}">
+                <label class="home_search_field">
+                    <i class="fa-solid fa-briefcase"></i>
+                    <input type="text" placeholder="eg. Graphic. Web Developer" name="job" th:value="${job}" />
+                </label>
+                <label class="home_search_field category_select_field">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <select name="category" aria-label="Select Category">
+                        <option value="All" th:selected="${category == null || category == 'All'}">Category (All)</option>
+                        <option value="Full-Time" th:selected="${category == 'Full-Time'}">Full-Time</option>
+                        <option value="Part-Time" th:selected="${category == 'Part-Time'}">Part-Time</option>
+                        <option value="Internship" th:selected="${category == 'Internship' || category == 'InternShip'}">Internship</option>
+                        <option value="Freelance" th:selected="${category == 'Freelance'}">Freelance</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down select_arrow"></i>
+                </label>
+                <label class="home_search_field">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <input type="text" placeholder="Location" name="location" th:value="${location}" />
+                </label>
+                <button type="submit" aria-label="Search jobs">
+                    <span>Search</span>
+                </button>
+            </form>
+
+        </section>
+
+        <!-- JOB CARDS GRID -->
+        <section class="home_jobs premium_jobs" th:if="${jobPost != null && !jobPost.isEmpty()}" aria-label="Featured jobs">
+            <a class="premium_job_card"
+               th:each="jobItem, iterStat : ${jobPost}"
+               th:if="${iterStat.index < 6}"
+               th:href="@{/job-details-apply/{id}(id=${jobItem.jobPostId})}">
+                
+                <div class="card_header">
+                    <div class="card_company_avatar">
+                        <i class="fa-solid fa-building"></i>
+                    </div>
+                    <div class="card_bookmark">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </div>
+                </div>
+
+                <div class="card_body">
+                    <div class="card_job_title" th:text="${jobItem.jobTitle}">Software Development Engineer</div>
+                    <div class="card_company_name" th:text="${jobItem.jobCompanyId.name}">Company Name</div>
+                    <div class="card_location">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span th:text="${jobItem.jobLocationId.city + ', ' + jobItem.jobLocationId.state}">City, State</span>
+                    </div>
+                </div>
+
+                <div class="card_meta_tags">
+                    <span class="card_tag salary" th:text="${jobItem.salary != null ? jobItem.salary : '$50k - $120k'}">$50k - $120k</span>
+                    <span class="card_tag type" th:text="${jobItem.jobType != null ? jobItem.jobType : 'Full-Time'}">Full-Time</span>
+                    <span class="card_tag remote" th:text="${jobItem.remote != null ? jobItem.remote : 'Remote'}">Remote</span>
+                </div>
+
+                <div class="card_footer">
+                    <span class="posted_date"><i class="fa-regular fa-clock"></i> <span th:text="${jobItem.postedDate != null ? #dates.format(jobItem.postedDate, 'dd MMM yyyy') : 'Recently'}">12 Nov 2026</span></span>
+                    <span style="color: #fb4f14; font-weight: 700;">Apply Now &rarr;</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- VIEW ALL JOBS BUTTON -->
+        <div class="view_all_jobs_container" th:if="${jobPost != null && !jobPost.isEmpty()}">
+            <a th:href="@{/global-search/}" class="view_all_btn">
+                <span>View All Jobs</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <!-- EMPTY STATE -->
+        <section class="home_jobs premium_jobs empty" th:if="${jobPost != null && jobPost.isEmpty()}">
+            <div class="premium_job_card" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; align-items: center; justify-content: center;">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 48px; color: #cbd5e1; margin-bottom: 16px;"></i>
+                <h3 style="font-size: 24px; font-weight: 700; color: #0f172a; margin: 0 0 8px;">No jobs found</h3>
+                <p style="color: #64748b; margin: 0;">We couldn't find any jobs matching your search criteria. Try checking your spelling or using less specific keywords.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- PREMIUM FOOTER -->
+    <footer class="premium_footer">
+        <div class="footer_grid">
+            <div class="footer_brand">
+                <img src="/assets/logo.png" alt="TalentTrack Logo" style="width: 200px; object-fit: contain;">
+                <p>TalentTrack is a modern, premium job portal connecting ambitious professionals with world-class companies across the globe.</p>
+            </div>
+            <div>
+                <h4 class="footer_heading">Quick Links</h4>
+                <div class="footer_links">
+                    <a th:href="@{/}">Home</a>
+                    <a th:href="@{/about}">About Us</a>
+                    <a th:href="@{/global-search/}">View Jobs</a>
+                    <a th:href="@{/login}">Login</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="footer_heading">Legal</h4>
+                <div class="footer_links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                    <a href="#">Cookie Policy</a>
+                    <a href="#">Security</a>
+                </div>
+            </div>
+            <div>
+                <h4 class="footer_heading">Connect With Us</h4>
+                <p style="margin: 0 0 16px; font-size: 15px;">Follow us on social media for the latest career updates and job tips.</p>
+                <div class="footer_socials">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer_bottom">
+            <span>&copy; 2026 <strong>TalentTrack.</strong> All rights reserved.</span>
+            <span>Designed with passion for job seekers & recruiters.</span>
+        </div>
+    </footer>
+
+    <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+
+</html>

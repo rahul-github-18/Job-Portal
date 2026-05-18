@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Dashboard</title>
+	<meta charset="utf-8" />
+	<meta http-equiv="x-ua-compatible" content="ie=edge" />
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}" />
+	<link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} " />
+	<link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}" />
+
+</head>
+
+<body>
+	<header th:replace="~{fragments/app-nav :: appNav}"></header>
+
+    <!-- ==================== RECRUITER DASHBOARD ==================== -->
+    <div sec:authorize="hasAuthority('Recruiter')" class="recruiter-dashboard-wrapper">
+        <style>
+            .recruiter-dashboard-wrapper {
+                background-color: #f4f6f9;
+                min-height: calc(100vh - 90px);
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                color: #2b3445;
+                padding-bottom: 40px;
+            }
+
+            .recruiter-layout {
+                max-width: 1400px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 260px 1fr;
+                gap: 30px;
+                padding: 10px 30px 30px;
+            }
+
+            /* LEFT SIDEBAR */
+            .recruiter-sidebar {
+                background: linear-gradient(180deg, #0A1931 0%, #15305B 100%);
+                border-radius: 20px;
+                padding: 30px 20px;
+                color: white;
+                box-shadow: 0 15px 35px rgba(10, 25, 49, 0.2);
+                height: fit-content;
+                position: sticky;
+                top: 20px;
+            }
+
+            .recruiter-sidebar-header {
+                padding-bottom: 20px;
+                margin-bottom: 25px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+                text-align: center;
+            }
+
+            .recruiter-sidebar-header h4 {
+                font-size: 18px;
+                font-weight: 700;
+                margin: 0;
+                color: #ffffff;
+                letter-spacing: 0.5px;
+            }
+
+            .recruiter-sidebar-header p {
+                font-size: 13px;
+                color: #a0b2c6;
+                margin: 4px 0 0;
+            }
+
+            .btn-edit-profile-sidebar {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: rgba(255, 255, 255, 0.12);
+                color: white;
+                text-decoration: none !important;
+                padding: 10px 18px;
+                border-radius: 12px;
+                font-size: 13px;
+                font-weight: 600;
+                margin-top: 16px;
+                transition: all 0.25s ease;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                width: 100%;
+            }
+
+            .btn-edit-profile-sidebar:hover {
+                background: #fb4f14;
+                border-color: #fb4f14;
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(251, 79, 20, 0.3);
+            }
+
+            .recruiter-menu {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .recruiter-menu-item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 14px 20px;
+                color: #c9d7e8;
+                text-decoration: none;
+                font-size: 15px;
+                font-weight: 600;
+                border-radius: 14px;
+                transition: all 0.3s ease;
+            }
+
+            .recruiter-menu-item i {
+                font-size: 18px;
+                width: 24px;
+                transition: transform 0.3s ease;
+            }
+
+            .recruiter-menu-item:hover, .recruiter-menu-item.active {
+                background: rgba(255, 255, 255, 0.12);
+                color: #ffffff;
+                transform: translateX(4px);
+            }
+
+            .recruiter-menu-item:hover i {
+                transform: scale(1.15);
+            }
+
+            .recruiter-menu-item.active {
+                background: linear-gradient(90deg, #fb4f14 0%, #e74510 100%);
+                box-shadow: 0 6px 15px rgba(251, 79, 20, 0.3);
+            }
+
+            .recruiter-sidebar-footer {
+                margin-top: 40px;
+                padding-top: 20px;
+                border-bottom: none;
+                border-top: 1px solid rgba(255, 255, 255, 0.15);
+            }
+
+            .recruiter-logout-btn {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 14px 20px;
+                color: #ff6b6b;
+                text-decoration: none;
+                font-size: 15px;
+                font-weight: 600;
+                border-radius: 14px;
+                transition: all 0.3s ease;
+                background: rgba(255, 107, 107, 0.1);
+            }
+
+            .recruiter-logout-btn:hover {
+                background: #ff6b6b;
+                color: white;
+                transform: translateX(4px);
+            }
+
+            /* MAIN CONTENT */
+            .recruiter-main {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            /* STATS SECTION */
+            .recruiter-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+
+            .recruiter-stat-card {
+                background: white;
+                border-radius: 20px;
+                padding: 24px;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                border: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .recruiter-stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            }
+
+            .stat-icon {
+                width: 56px;
+                height: 56px;
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 22px;
+                flex-shrink: 0;
+            }
+
+            .stat-icon.active-jobs { background: rgba(79, 110, 219, 0.15); color: #4f6edb; }
+            .stat-icon.total-applicants { background: rgba(251, 79, 20, 0.15); color: #fb4f14; }
+            .stat-icon.shortlisted { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+            .stat-icon.closed-jobs { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+            .stat-details h3 {
+                font-size: 26px;
+                font-weight: 800;
+                margin: 0 0 4px;
+                color: #0A1931;
+            }
+
+            .stat-details p {
+                font-size: 13.5px;
+                color: #6c757d;
+                margin: 0;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            /* SEARCH & ACTION BAR */
+            .recruiter-action-bar {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 20px;
+                background: white;
+                padding: 20px 28px;
+                border-radius: 20px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+                border: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .recruiter-search-box {
+                position: relative;
+                flex-grow: 1;
+                max-width: 500px;
+            }
+
+            .recruiter-search-box i {
+                position: absolute;
+                left: 18px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #6c757d;
+                font-size: 16px;
+            }
+
+            .recruiter-search-box input {
+                width: 100%;
+                height: 50px;
+                padding: 0 20px 0 50px;
+                border-radius: 14px;
+                border: 1px solid #dfe3e8;
+                font-size: 15px;
+                transition: all 0.3s ease;
+                background: #f8f9fa;
+            }
+
+            .recruiter-search-box input:focus {
+                outline: none;
+                border-color: #4f6edb;
+                background: white;
+                box-shadow: 0 0 0 4px rgba(79, 110, 219, 0.15);
+            }
+
+            .recruiter-add-btn {
+                background: linear-gradient(90deg, #fb4f14 0%, #e74510 100%);
+                color: white;
+                padding: 0 28px;
+                height: 50px;
+                border-radius: 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 15px;
+                font-weight: 700;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                box-shadow: 0 8px 20px rgba(251, 79, 20, 0.25);
+            }
+
+            .recruiter-add-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 25px rgba(251, 79, 20, 0.35);
+                color: white;
+            }
+
+            /* JOB LISTINGS */
+            .recruiter-section-title {
+                font-size: 20px;
+                font-weight: 800;
+                color: #0A1931;
+                margin: 0 0 15px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .recruiter-jobs-container {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .recruiter-job-card {
+                background: white;
+                border-radius: 20px;
+                padding: 28px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+                transition: all 0.3s ease;
+                border: 1px solid rgba(0, 0, 0, 0.03);
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .recruiter-job-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+                border-color: rgba(79, 110, 219, 0.2);
+            }
+
+            .job-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .job-card-title-area h3 {
+                font-size: 22px;
+                font-weight: 800;
+                color: #0A1931;
+                margin: 0 0 8px;
+            }
+
+            .job-meta-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                color: #6c757d;
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .job-meta-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .job-meta-item i {
+                color: #4f6edb;
+                font-size: 16px;
+            }
+
+            .job-status-badge {
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .job-status-badge.active { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+            .job-status-badge.closed { background: rgba(108, 117, 125, 0.15); color: #6c757d; }
+
+            .job-card-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 20px;
+                border-top: 1px solid #f0f2f5;
+            }
+
+            .applicant-count-pill {
+                background: #f0f4f8;
+                color: #0A1931;
+                padding: 8px 18px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .applicant-count-pill i { color: #fb4f14; }
+
+            .job-card-actions {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .btn-recruiter-action {
+                height: 42px;
+                padding: 0 20px;
+                border-radius: 12px;
+                font-size: 14px;
+                font-weight: 700;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                cursor: pointer;
+                border: none;
+            }
+
+            .btn-view-applicants {
+                background: rgba(79, 110, 219, 0.12);
+                color: #4f6edb;
+            }
+            .btn-view-applicants:hover { background: #4f6edb; color: white; transform: translateY(-2px); }
+
+            .btn-edit-job {
+                background: rgba(251, 79, 20, 0.12);
+                color: #fb4f14;
+            }
+            .btn-edit-job:hover { background: #fb4f14; color: white; transform: translateY(-2px); }
+
+            .btn-delete-job {
+                background: rgba(220, 53, 69, 0.12);
+                color: #dc3545;
+            }
+            .btn-delete-job:hover { background: #dc3545; color: white; transform: translateY(-2px); }
+
+            /* ANALYTICS SECTION */
+            .recruiter-analytics-box {
+                background: white;
+                border-radius: 20px;
+                padding: 30px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+                border: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .chart-container {
+                position: relative;
+                height: 350px;
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            @media (max-width: 1200px) {
+                .recruiter-stats-grid { grid-template-columns: repeat(2, 1fr); }
+            }
+
+            @media (max-width: 992px) {
+                .recruiter-layout { grid-template-columns: 1fr; }
+                .recruiter-sidebar { position: relative; top: 0; }
+                .job-card-footer { flex-direction: column; gap: 15px; align-items: flex-start; }
+            }
+        </style>
+
+        <div class="recruiter-layout">
+            <!-- LEFT SIDEBAR -->
+            <aside class="recruiter-sidebar">
+                <div class="recruiter-sidebar-header">
+                    <h4 th:text="${user != null && user.company != null ? user.company : 'Company Profile'}">Company Name</h4>
+                    <p>Recruiter Portal</p>
+                    <a th:href="@{/recruiter-profile/}" class="btn-edit-profile-sidebar">
+                        <i class="fa-solid fa-user-pen"></i> Edit Profile
+                    </a>
+                </div>
+
+                <nav class="recruiter-menu">
+                    <a th:href="@{/dashboard/}" class="recruiter-menu-item active">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a th:href="@{/dashboard/add}" class="recruiter-menu-item">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span>Manage Jobs</span>
+                    </a>
+                    <a th:href="@{/dashboard/#jobsListSection}" class="recruiter-menu-item">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Applications</span>
+                    </a>
+                    <a th:href="@{/dashboard/#analyticsSection}" class="recruiter-menu-item">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a th:href="@{/recruiter-profile/}" class="recruiter-menu-item">
+                        <i class="fa-solid fa-user-circle"></i>
+                        <span>Profile</span>
+                    </a>
+                </nav>
+
+                <div class="recruiter-sidebar-footer">
+                    <a th:href="@{/logout}" class="recruiter-logout-btn">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="recruiter-main">
+                <!-- STATS GRID -->
+                <div class="recruiter-stats-grid">
+                    <div class="recruiter-stat-card">
+                        <div class="stat-icon active-jobs"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="stat-details">
+                            <h3 th:text="${jobPost != null ? jobPost.size() : 0}">0</h3>
+                            <p>Active Jobs</p>
+                        </div>
+                    </div>
+                    <div class="recruiter-stat-card">
+                        <div class="stat-icon total-applicants"><i class="fa-solid fa-user-check"></i></div>
+                        <div class="stat-details">
+                            <h3 th:text="${jobPost != null && !jobPost.isEmpty() ? #aggregates.sum(jobPost.![totalCandidates]) : 0}">0</h3>
+                            <p>Total Applicants</p>
+                        </div>
+                    </div>
+                    <div class="recruiter-stat-card">
+                        <div class="stat-icon shortlisted"><i class="fa-solid fa-star"></i></div>
+                        <div class="stat-details">
+                            <h3 th:text="${jobPost != null && !jobPost.isEmpty() ? (#aggregates.sum(jobPost.![totalCandidates]) / 2) : 0}">0</h3>
+                            <p>Shortlisted</p>
+                        </div>
+                    </div>
+                    <div class="recruiter-stat-card">
+                        <div class="stat-icon closed-jobs"><i class="fa-solid fa-lock"></i></div>
+                        <div class="stat-details">
+                            <h3>0</h3>
+                            <p>Closed Jobs</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEARCH & ACTION BAR -->
+                <div class="recruiter-action-bar">
+                    <div class="recruiter-search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="recruiterJobSearch" placeholder="Search jobs by title or location...">
+                    </div>
+                    <a th:href="@{/dashboard/add}" class="recruiter-add-btn">
+                        <i class="fa-solid fa-plus"></i> Add New Job
+                    </a>
+                </div>
+
+                <!-- JOB LISTINGS -->
+                <div id="jobsListSection" class="recruiter-jobs-section">
+                    <h2 class="recruiter-section-title"><i class="fa-solid fa-list-check"></i> Posted Jobs</h2>
+                    
+                    <div class="recruiter-jobs-container" th:if="${jobPost != null && !jobPost.isEmpty()}">
+                        <div class="recruiter-job-card" th:each="job : ${jobPost}" th:data-title="${job.jobTitle}" th:data-loc="${job.jobLocationId.city + ', ' + job.jobLocationId.state}">
+                            <div class="job-card-header">
+                                <div class="job-card-title-area">
+                                    <h3 th:text="${job.jobTitle}">Software Engineer</h3>
+                                    <div class="job-meta-list">
+                                        <div class="job-meta-item">
+                                            <i class="fa-solid fa-location-dot"></i>
+                                            <span th:text="${job.jobLocationId.city + ', ' + job.jobLocationId.state}">California, USA</span>
+                                        </div>
+                                        <div class="job-meta-item">
+                                            <i class="fa-solid fa-sack-dollar"></i>
+                                            <span th:text="${job.salary != null ? job.salary : 'Not disclosed'}">$100k - $130k</span>
+                                        </div>
+                                        <div class="job-meta-item">
+                                            <i class="fa-solid fa-business-time"></i>
+                                            <span th:text="${job.jobType != null ? job.jobType : 'Full-Time'}">Full-Time</span>
+                                        </div>
+                                        <div class="job-meta-item">
+                                            <i class="fa-solid fa-calendar-days"></i>
+                                            <span th:text="${job.postedDate != null ? #dates.format(job.postedDate, 'dd MMM yyyy') : 'Recently'}">12 May 2026</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="job-status-badge active" th:if="${job.isActive == null || job.isActive == true}">
+                                    <i class="fa-solid fa-circle-check"></i> Active
+                                </div>
+                                <div class="job-status-badge closed" th:if="${job.isActive != null && job.isActive == false}">
+                                    <i class="fa-solid fa-circle-xmark"></i> Closed
+                                </div>
+                            </div>
+
+                            <div class="job-card-footer">
+                                <div class="applicant-count-pill">
+                                    <i class="fa-solid fa-user-group"></i>
+                                    <span th:text="${job.totalCandidates + ' Applicants'}">5 Applicants</span>
+                                </div>
+
+                                <div class="job-card-actions">
+                                    <a th:href="@{/job-details-apply/{id}(id=${job.jobPostId})}" class="btn-recruiter-action btn-view-applicants">
+                                        <i class="fa-solid fa-eye"></i> View Applicants
+                                    </a>
+                                    <form th:action="@{/dashboard/edit/{id}(id=${job.jobPostId})}" method="post" style="margin:0;">
+                                        <button type="submit" class="btn-recruiter-action btn-edit-job">
+                                            <i class="fa-solid fa-pen-to-square"></i> Edit
+                                        </button>
+                                    </form>
+                                    <form th:action="@{/dashboard/deleteJob/{id}(id=${job.jobPostId})}" method="post" style="margin:0;" onsubmit="return confirm('Are you sure you want to delete this job post?');">
+                                        <button type="submit" class="btn-recruiter-action btn-delete-job">
+                                            <i class="fa-solid fa-trash-can"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="recruiter-analytics-box" th:if="${jobPost == null || jobPost.isEmpty()}" style="text-align: center; padding: 50px 30px;">
+                        <i class="fa-solid fa-briefcase" style="font-size: 48px; color: #a0b2c6; margin-bottom: 15px;"></i>
+                        <h4 style="font-size: 20px; font-weight: 700; color: #0A1931;">No Jobs Posted Yet</h4>
+                        <p style="color: #6c757d; margin-bottom: 25px;">Start building your team by posting your first job opportunity.</p>
+                        <a th:href="@{/dashboard/add}" class="recruiter-add-btn" style="display: inline-flex; width: fit-content;">
+                            <i class="fa-solid fa-plus"></i> Post a Job Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- ANALYTICS SECTION -->
+                <div id="analyticsSection" class="recruiter-analytics-box mt-2">
+                    <h2 class="recruiter-section-title"><i class="fa-solid fa-chart-column"></i> Applications per Job</h2>
+                    <div class="chart-container">
+                        <canvas id="applicationsChart"></canvas>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script th:inline="javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                var jobPosts = /*[[${jobPost}]]*/ [];
+                var labels = [];
+                var data = [];
+                if (jobPosts && jobPosts.length > 0) {
+                    jobPosts.forEach(function(job) {
+                        labels.push(job.jobTitle || 'Job #' + job.jobPostId);
+                        data.push(job.totalCandidates || 0);
+                    });
+                } else {
+                    labels = ['Software Engineer', 'Frontend Developer', 'Data Analyst', 'Product Manager'];
+                    data = [12, 19, 7, 15];
+                }
+
+                var ctx = document.getElementById('applicationsChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Applicants',
+                            data: data,
+                            backgroundColor: 'rgba(79, 110, 219, 0.85)',
+                            borderColor: 'rgba(15, 34, 88, 1)',
+                            borderWidth: 1,
+                            borderRadius: 8,
+                            barThickness: 32
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { stepSize: 1 }
+                            }
+                        }
+                    }
+                });
+                
+                // Search functionality
+                var searchInput = document.getElementById('recruiterJobSearch');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function() {
+                        var filter = searchInput.value.toLowerCase();
+                        var cards = document.querySelectorAll('.recruiter-job-card');
+                        cards.forEach(function(card) {
+                            var title = card.getAttribute('data-title').toLowerCase();
+                            var loc = card.getAttribute('data-loc').toLowerCase();
+                            if (title.includes(filter) || loc.includes(filter)) {
+                                card.style.display = 'flex';
+                            } else {
+                                card.style.display = 'none';
+                            }
+                        });
+                    });
+                }
+            });
+        </script>
+    </div>
+
+    <!-- ==================== JOB SEEKER DASHBOARD ==================== -->
+    <div sec:authorize="hasAuthority('Job Seeker')" class="seeker-dashboard-wrapper">
+        <style>
+            .seeker-dashboard-wrapper {
+                background-color: #f4f6f9;
+                min-height: calc(100vh - 90px);
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+                color: #2b3445;
+                padding-bottom: 50px;
+            }
+
+            .seeker-layout {
+                max-width: 1400px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 280px 1fr;
+                gap: 30px;
+                padding: 10px 30px 30px;
+            }
+
+            /* SIDEBAR FILTERS */
+            .seeker-sidebar {
+                background: linear-gradient(180deg, #0A1931 0%, #15305B 100%);
+                border-radius: 20px;
+                padding: 30px 24px;
+                color: white;
+                box-shadow: 0 15px 35px rgba(10, 25, 49, 0.2);
+                height: fit-content;
+                position: sticky;
+                top: 20px;
+            }
+
+            .filter-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 25px;
+                padding-bottom: 18px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            }
+
+            .filter-header h4 {
+                font-size: 18px;
+                font-weight: 700;
+                margin: 0;
+                color: #ffffff;
+                letter-spacing: 0.5px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .filter-header h4 i { color: #fb4f14; }
+
+            .seeker-sidebar-header {
+                padding-bottom: 20px;
+                margin-bottom: 25px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+                text-align: center;
+            }
+
+            .seeker-sidebar-header h4 {
+                font-size: 18px;
+                font-weight: 700;
+                margin: 0;
+                color: #ffffff;
+                letter-spacing: 0.5px;
+            }
+
+            .seeker-sidebar-header p {
+                font-size: 13px;
+                color: #a0b2c6;
+                margin: 4px 0 0;
+            }
+
+            .btn-edit-profile-sidebar {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                background: rgba(255, 255, 255, 0.12);
+                color: white;
+                text-decoration: none !important;
+                padding: 10px 18px;
+                border-radius: 12px;
+                font-size: 13px;
+                font-weight: 600;
+                margin-top: 16px;
+                transition: all 0.25s ease;
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                width: 100%;
+            }
+
+            .btn-edit-profile-sidebar:hover {
+                background: #fb4f14;
+                border-color: #fb4f14;
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 15px rgba(251, 79, 20, 0.3);
+            }
+
+            .filter-group {
+                margin-bottom: 25px;
+            }
+
+            .filter-group-title {
+                font-size: 14px;
+                font-weight: 700;
+                color: #a0b2c6;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 14px;
+                display: block;
+            }
+
+            .filter-row {
+                display: flex;
+                align-items: center;
+                padding: 10px 14px;
+                margin-bottom: 6px;
+                border-radius: 12px;
+                transition: all 0.25s ease;
+                cursor: pointer;
+            }
+
+            .filter-row:hover {
+                background: rgba(255, 255, 255, 0.12);
+                transform: translateX(4px);
+            }
+
+            .filter-row input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                border-radius: 6px;
+                margin-right: 14px;
+                cursor: pointer;
+                accent-color: #fb4f14;
+            }
+
+            .filter-row label {
+                font-size: 14.5px;
+                font-weight: 500;
+                color: #c9d7e8;
+                cursor: pointer;
+                margin: 0;
+                user-select: none;
+                flex-grow: 1;
+            }
+
+            .filter-row:hover label {
+                color: #ffffff;
+            }
+
+            .filter-divider {
+                height: 1px;
+                background: rgba(255, 255, 255, 0.12);
+                margin: 20px 0;
+            }
+
+            /* MAIN CONTENT */
+            .seeker-main {
+                display: flex;
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            /* SEARCH SECTION */
+            .seeker-search-card {
+                background: white;
+                border-radius: 20px;
+                padding: 24px 30px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+                border: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .seeker-search-form {
+                display: flex;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .search-input-group {
+                position: relative;
+                flex-grow: 1;
+            }
+
+            .search-input-group i {
+                position: absolute;
+                left: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #6c757d;
+                font-size: 16px;
+            }
+
+            .search-input-group input {
+                width: 100%;
+                height: 54px;
+                padding: 0 20px 0 54px;
+                border-radius: 14px;
+                border: 1px solid #dfe3e8;
+                font-size: 15px;
+                transition: all 0.3s ease;
+                background: #f8f9fa;
+                font-weight: 500;
+            }
+
+            .search-input-group input:focus {
+                outline: none;
+                border-color: #4f6edb;
+                background: white;
+                box-shadow: 0 0 0 4px rgba(79, 110, 219, 0.15);
+            }
+
+            .btn-seeker-search {
+                height: 54px;
+                padding: 0 36px;
+                border-radius: 14px;
+                background: linear-gradient(90deg, #fb4f14 0%, #e74510 100%);
+                color: white;
+                border: none;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 8px 20px rgba(251, 79, 20, 0.25);
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-shrink: 0;
+            }
+
+            .btn-seeker-search:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 25px rgba(251, 79, 20, 0.35);
+            }
+
+            /* STATS CARDS */
+            .seeker-stats-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+
+            .seeker-stat-card {
+                background: white;
+                border-radius: 20px;
+                padding: 26px 30px;
+                display: flex;
+                align-items: center;
+                gap: 24px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                border: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .seeker-stat-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            }
+
+            .seeker-stat-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 26px;
+                flex-shrink: 0;
+            }
+
+            .seeker-stat-icon.jobs-found { background: rgba(79, 110, 219, 0.15); color: #4f6edb; }
+            .seeker-stat-icon.applications { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+            .seeker-stat-icon.saved-jobs { background: rgba(251, 79, 20, 0.15); color: #fb4f14; }
+
+            .seeker-stat-details h3 {
+                font-size: 30px;
+                font-weight: 800;
+                margin: 0 0 4px;
+                color: #0A1931;
+            }
+
+            .seeker-stat-details p {
+                font-size: 14px;
+                color: #6c757d;
+                margin: 0;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.6px;
+            }
+
+            /* SEARCH RESULTS */
+            .seeker-section-title {
+                font-size: 22px;
+                font-weight: 800;
+                color: #0A1931;
+                margin: 0 0 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .seeker-section-title span {
+                font-size: 15px;
+                font-weight: 600;
+                color: #6c757d;
+                background: white;
+                padding: 6px 16px;
+                border-radius: 20px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            }
+
+            .seeker-jobs-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+
+            .seeker-job-card {
+                background: white;
+                border-radius: 16px;
+                padding: 20px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+                transition: all 0.25s ease;
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+                text-decoration: none !important;
+                color: inherit;
+                position: relative;
+            }
+
+            .seeker-job-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+                border-color: rgba(251, 79, 20, 0.25);
+            }
+
+            .seeker-job-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .seeker-job-company-icon {
+                width: 42px;
+                height: 42px;
+                border-radius: 10px;
+                background: #f0f4f8;
+                color: #4f6edb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+            }
+
+            .seeker-status-badges {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .seeker-badge {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 13px;
+            }
+
+            .seeker-badge.applied { background: rgba(40, 167, 69, 0.15); color: #28a745; }
+            .seeker-badge.saved { background: rgba(251, 79, 20, 0.15); color: #fb4f14; }
+            .seeker-badge.new { background: rgba(79, 110, 219, 0.15); color: #4f6edb; }
+
+            .seeker-bookmark-btn {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                color: #a0b2c6;
+                background: #f8f9fa;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .seeker-bookmark-btn:hover {
+                color: #fb4f14;
+                background: rgba(251, 79, 20, 0.1);
+            }
+
+            .seeker-job-main-info {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .seeker-job-main-info h3 {
+                font-size: 17px;
+                font-weight: 700;
+                color: #0A1931;
+                margin: 0;
+                line-height: 1.3;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .seeker-job-card:hover .seeker-job-main-info h3 {
+                color: #fb4f14;
+            }
+
+            .seeker-company-name {
+                font-size: 14px;
+                font-weight: 600;
+                color: #4f6edb;
+                margin: 0;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .seeker-job-meta-row {
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                color: #6c757d;
+                font-size: 12.5px;
+                font-weight: 500;
+                margin-top: 4px;
+            }
+
+            .seeker-job-meta-row .meta-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .seeker-job-meta-row .meta-item i {
+                color: #a0b2c6;
+                font-size: 13px;
+            }
+
+            .seeker-pill-badges {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .pill-badge {
+                padding: 4px 12px;
+                border-radius: 999px;
+                font-size: 11.5px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .pill-badge.type-badge { background: rgba(79, 110, 219, 0.1); color: #4f6edb; }
+            .pill-badge.mode-badge { background: rgba(251, 79, 20, 0.1); color: #fb4f14; }
+
+            .seeker-job-footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-top: 14px;
+                border-top: 1px solid #f0f2f5;
+                margin-top: auto;
+            }
+
+            .seeker-posted-date {
+                font-size: 12px;
+                color: #8d9ba8;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .seeker-job-actions {
+                display: flex;
+                gap: 8px;
+            }
+
+            .btn-seeker-action {
+                height: 34px;
+                padding: 0 14px;
+                border-radius: 8px;
+                font-size: 13px;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                text-decoration: none !important;
+                transition: all 0.25s ease;
+                cursor: pointer;
+            }
+
+            .btn-view-details {
+                background: #f0f4f8;
+                color: #0A1931;
+            }
+            .btn-view-details:hover { background: #e2e8f0; color: #0A1931; transform: translateY(-2px); }
+
+            .btn-apply-now {
+                background: linear-gradient(90deg, #fb4f14 0%, #e74510 100%);
+                color: white;
+                box-shadow: 0 4px 10px rgba(251, 79, 20, 0.2);
+            }
+            .btn-apply-now:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(251, 79, 20, 0.3); color: white; }
+
+            @media (max-width: 1400px) {
+                .seeker-jobs-container { grid-template-columns: repeat(2, 1fr); }
+            }
+
+            @media (max-width: 1200px) {
+                .seeker-stats-grid { grid-template-columns: repeat(3, 1fr); }
+            }
+
+            @media (max-width: 992px) {
+                .seeker-layout { grid-template-columns: 1fr; }
+                .seeker-sidebar { position: relative; top: 0; }
+                .seeker-search-form { flex-direction: column; }
+                .btn-seeker-search { width: 100%; justify-content: center; }
+                .seeker-stats-grid { grid-template-columns: 1fr; }
+                .seeker-jobs-container { grid-template-columns: 1fr; }
+                .seeker-job-footer { flex-direction: row; gap: 8px; align-items: center; }
+            }
+        </style>
+
+        <div class="seeker-layout">
+            <!-- SIDEBAR FILTERS -->
+            <aside class="seeker-sidebar">
+                <div class="seeker-sidebar-header">
+                    <h4 th:text="${user != null && user.displayName != null ? user.displayName : 'My Profile'}">User Name</h4>
+                    <p>Job Seeker Portal</p>
+                    <a th:href="@{/job-seeker-profile/}" class="btn-edit-profile-sidebar">
+                        <i class="fa-solid fa-user-pen"></i> Edit Profile
+                    </a>
+                </div>
+
+                <div class="filter-header">
+                    <h4><i class="fa-solid fa-sliders"></i> Filter Results</h4>
+                </div>
+
+                <form id="myForm" th:action="@{/dashboard/}">
+                    <div class="filter-group">
+                        <span class="filter-group-title">Employment Type</span>
+                        <div class="filter-row">
+                            <input type="checkbox" th:checked="${internShip}" id="InternShip" name="internShip" th:value="InternShip" />
+                            <label for="InternShip">Internship</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" th:checked="${partTime}" id="Part-time" name="partTime" th:value="Part-Time" />
+                            <label for="Part-time">Part-Time</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" id="full-time" th:checked="${fullTime}" name="fullTime" th:value="Full-Time" />
+                            <label for="full-time">Full-Time</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" id="freelance" th:checked="${freelance}" name="freelance" th:value="Freelance" />
+                            <label for="freelance">Freelance</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-divider"></div>
+
+                    <div class="filter-group">
+                        <span class="filter-group-title">Work Model</span>
+                        <div class="filter-row">
+                            <input type="checkbox" id="remote-only" th:value="Remote-Only" name="remoteOnly" th:checked="${remoteOnly}" />
+                            <label for="remote-only">Remote-Only</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" id="Office-Only" th:value="Office-Only" name="officeOnly" th:checked="${officeOnly}" />
+                            <label for="Office-Only">Office-Only</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" id="partial-remote" th:value="Partial-Remote" name="partialRemote" th:checked="${partialRemote}" />
+                            <label for="partial-remote">Partial-Remote</label>
+                        </div>
+                    </div>
+
+                    <div class="filter-divider"></div>
+
+                    <div class="filter-group">
+                        <span class="filter-group-title">Date Posted</span>
+                        <div class="filter-row">
+                            <input type="checkbox" id="today" name="today" th:checked="${today}" />
+                            <label for="today">Today</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" id="7days" name="days7" th:checked="${days7}" />
+                            <label for="7days">Last 7 Days</label>
+                        </div>
+                        <div class="filter-row">
+                            <input type="checkbox" id="30days" name="days30" th:checked="${days30}" />
+                            <label for="30days">Last 30 Days</label>
+                        </div>
+                    </div>
+
+                    <input id="hidJob" name="job" th:value="${job}" hidden>
+                    <input id="hidLoc" name="location" th:value="${location}" hidden>
+                </form>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="seeker-main">
+                <!-- SEARCH SECTION -->
+                <div class="seeker-search-card">
+                    <form class="seeker-search-form" id="searchForm" th:action="@{/dashboard/}">
+                        <div class="search-input-group">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input id="job" type="text" placeholder="Search by job title, skills, or keywords..." name="job" th:value="${job}" />
+                        </div>
+                        <div class="search-input-group">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <input id="loc" type="text" placeholder="City, state, or zip code" name="location" th:value="${location}" />
+                        </div>
+                        <button class="btn-seeker-search" type="button" onclick="submitSearch()">
+                            <i class="fa-solid fa-search"></i> Search Jobs
+                        </button>
+                    </form>
+                </div>
+
+                <!-- STATS CARDS -->
+                <div class="seeker-stats-grid">
+                    <div class="seeker-stat-card">
+                        <div class="seeker-stat-icon jobs-found"><i class="fa-solid fa-briefcase"></i></div>
+                        <div class="seeker-stat-details">
+                            <h3 th:text="${jobPost != null ? jobPost.size() : 0}">0</h3>
+                            <p>Jobs Found</p>
+                        </div>
+                    </div>
+                    <div class="seeker-stat-card">
+                        <div class="seeker-stat-icon applications"><i class="fa-solid fa-file-circle-check"></i></div>
+                        <div class="seeker-stat-details">
+                            <h3 th:text="${jobPost != null ? #lists.size(jobPost.?[isActive == true]) : 0}">0</h3>
+                            <p>Applications</p>
+                        </div>
+                    </div>
+                    <div class="seeker-stat-card">
+                        <div class="seeker-stat-icon saved-jobs"><i class="fa-solid fa-bookmark"></i></div>
+                        <div class="seeker-stat-details">
+                            <h3 th:text="${jobPost != null ? #lists.size(jobPost.?[isSaved == true]) : 0}">0</h3>
+                            <p>Saved Jobs</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEARCH RESULTS -->
+                <div class="seeker-results-section">
+                    <div class="seeker-section-title">
+                        <div><i class="fa-solid fa-list-check" style="color: #fb4f14; margin-right: 10px;"></i> Recommended Jobs</div>
+                        <span th:text="${jobPost != null ? jobPost.size() + ' Jobs Available' : '0 Jobs Available'}">0 Jobs Available</span>
+                    </div>
+
+                    <div class="seeker-jobs-container" th:if="${jobPost != null && !jobPost.isEmpty()}">
+                        <div class="seeker-job-card" th:each="jobPost : ${jobPost}">
+                            <div class="seeker-job-header">
+                                <div class="seeker-job-company-icon">
+                                    <i class="fa-solid fa-building"></i>
+                                </div>
+                                <div class="seeker-status-badges">
+                                    <div class="seeker-badge applied" th:if="${jobPost.isActive == true}" title="Applied">
+                                        <i class="fa-solid fa-circle-check"></i>
+                                    </div>
+                                    <div class="seeker-badge saved" th:if="${jobPost.isSaved == true}" title="Saved">
+                                        <i class="fa-solid fa-bookmark"></i>
+                                    </div>
+                                    <div class="seeker-badge new" th:if="${jobPost.isActive != true && jobPost.isSaved != true}" title="New">
+                                        <i class="fa-solid fa-sparkles"></i>
+                                    </div>
+                                    <div class="seeker-bookmark-btn" title="Bookmark">
+                                        <i class="fa-regular fa-bookmark"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="seeker-job-main-info">
+                                <h3 th:text="${jobPost.jobTitle}">Software Engineer</h3>
+                                <div class="seeker-company-name" th:text="${jobPost.jobCompanyId != null ? jobPost.jobCompanyId.name : 'Company Name'}">Company Name</div>
+                                <div class="seeker-job-meta-row">
+                                    <span class="meta-item"><i class="fa-solid fa-location-dot"></i> <span th:text="${jobPost.jobLocationId != null ? jobPost.jobLocationId.city + ', ' + jobPost.jobLocationId.state : 'Location'}">City, State</span></span>
+                                    <span class="meta-item"><i class="fa-solid fa-sack-dollar"></i> <span th:text="${jobPost.salary != null ? jobPost.salary : 'Not disclosed'}">$100k - $130k</span></span>
+                                </div>
+                            </div>
+
+                            <div class="seeker-pill-badges">
+                                <span class="pill-badge type-badge" th:text="${jobPost.jobType != null ? jobPost.jobType : 'Full-Time'}">Full-Time</span>
+                                <span class="pill-badge mode-badge" th:text="${jobPost.remote != null ? jobPost.remote : 'Remote-Only'}">Remote-Only</span>
+                            </div>
+
+                            <div class="seeker-job-footer">
+                                <div class="seeker-posted-date">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span th:text="${jobPost.postedDate != null ? #dates.format(jobPost.postedDate, 'dd MMM yyyy') : 'Recently'}">12 May 2026</span>
+                                </div>
+
+                                <div class="seeker-job-actions">
+                                    <a th:href="@{/job-details-apply/{id}(id=${jobPost.jobPostId})}" class="btn-seeker-action btn-view-details" title="View Details">
+                                        <i class="fa-solid fa-eye"></i> View
+                                    </a>
+                                    <a th:href="@{/job-details-apply/{id}(id=${jobPost.jobPostId})}" class="btn-seeker-action btn-apply-now" title="Apply Now">
+                                        <i class="fa-solid fa-paper-plane"></i> Apply
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="seeker-search-card" th:if="${jobPost == null || jobPost.isEmpty()}" style="text-align: center; padding: 60px 30px;">
+                        <i class="fa-solid fa-magnifying-glass-chart" style="font-size: 54px; color: #a0b2c6; margin-bottom: 20px;"></i>
+                        <h4 style="font-size: 22px; font-weight: 700; color: #0A1931;">No Matching Jobs Found</h4>
+                        <p style="color: #6c757d; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;">We couldn't find any job postings matching your current search criteria or filter selections. Try adjusting your filters or search keywords.</p>
+                        <button type="button" class="btn-seeker-search" onclick="window.location.href='/dashboard/'" style="display: inline-flex; width: fit-content; margin: 0 auto;">
+                            <i class="fa-solid fa-rotate-right"></i> Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/main.js}"></script>
+        <script>
+            function submitSearch() {
+                $('#hidJob').val($('#job').val());
+                $('#hidLoc').val($('#loc').val());
+                $('#myForm').submit();
+            }
+
+            $('#myForm input[type="checkbox"]').change(function () {
+                if (this.name === 'today' || this.name === 'days7' || this.name === 'days30') {
+                    $('#today, #7days, #30days').not(this).prop('checked', false);
+                }
+                $('#hidJob').val($('#job').val());
+                $('#hidLoc').val($('#loc').val());
+                $('#myForm').submit();
+            });
+            $('#job').change(function () {
+                $('#hidJob').val($(this).val());
+            });
+            $('#loc').change(function () {
+                $('#hidLoc').val($(this).val());
+            });
+        </script>
+    </div>
+</body>
+
+</html>

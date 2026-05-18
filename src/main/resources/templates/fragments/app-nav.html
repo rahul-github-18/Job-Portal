@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header class="main_div sticky_nav" th:fragment="appNav">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <a class="logo_left" th:href="@{/}" aria-label="TalentTrack home">
+        <img src="/assets/logo.png" alt="TalentTrack Logo" class="site_logo">
+    </a>
+
+    <div class="home_nav_links" aria-label="Primary navigation">
+        <a class="home_nav_link" th:href="@{/}">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a class="home_nav_link" th:href="@{/about}">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>About Us</span>
+        </a>
+        <a class="home_nav_link" th:href="@{/global-search/}">
+            <i class="fa-solid fa-briefcase"></i>
+            <span>View Jobs</span>
+        </a>
+    </div>
+
+    <div class="logo_right">
+        <a class="header_action_btn primary-action" sec:authorize="isAnonymous()" th:href="@{/login}">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <span>Login</span>
+        </a>
+
+        <a class="header_action_btn secondary-action" sec:authorize="isAnonymous()" th:href="@{/register}">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Register</span>
+        </a>
+
+        <span class="app_nav_user" sec:authorize="isAuthenticated()" style="display: inline-flex; align-items: center; gap: 8px; color: white; font-size: 14px; font-weight: 600;">
+            <img class="app_nav_avatar" th:if="${user != null && user.photosImagePath != null}" th:src="@{${user.photosImagePath}}" alt="" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.45);">
+            <span class="app_nav_name" th:if="${user != null}" th:text="${user.displayName}">User</span>
+        </span>
+        <a class="header_action_btn secondary-action" sec:authorize="isAuthenticated()" th:href="@{/logout}">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+        </a>
+    </div>
+</header>
+</body>
+</html>

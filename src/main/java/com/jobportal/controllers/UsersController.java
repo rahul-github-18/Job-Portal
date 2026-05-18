@@ -1,0 +1,88 @@
+package com.jobportal.controllers;
+
+import com.jobportal.entity.Users;
+import com.jobportal.entity.UsersType;
+import com.jobportal.services.UsersService;
+import com.jobportal.services.UsersTypeService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Optional;
+
+@Controller
+public class UsersController {
+
+    private final UsersTypeService usersTypeService;
+    private final UsersService usersService;
+
+    @Autowired
+    public UsersController(UsersTypeService usersTypeService, UsersService usersService) {
+        this.usersTypeService = usersTypeService;
+        this.usersService = usersService;
+    }
+
+    @GetMapping("/register")
+    public String register(@RequestParam(value = "type", required = false) Integer selectedType, Model model) {
+        List<UsersType> usersTypes = usersTypeService.getAll();
+        Users user = new Users();
+        if (selectedType != null) {
+            usersTypes.stream()
+                    .filter(userType -> userType.getUserTypeId() == selectedType)
+                    .findFirst()
+                    .ifPresent(user::setUserTypeId);
+        }
+        model.addAttribute("getAllTypes", usersTypes);
+        model.addAttribute("selectedType", selectedType);
+        model.addAttribute("user", user);
+        return "register";
+    }
+
+    @PostMapping("/register/new")
+    public String userRegistration(@Valid Users users, Model model) {
+        Optional<Users> optionalUsers = usersService.getUserByEmail(users.getEmail());
+        if (optionalUsers.isPresent()) {
+            model.addAttribute("error", "Email already registered,try to login or register with other email.");
+            List<UsersType> usersTypes = usersTypeService.getAll();
+            model.addAttribute("getAllTypes", usersTypes);
+            model.addAttribute("user", new Users());
+            return "register";
+        }
+        usersService.addNew(users);
+        return "redirect:/dashboard/";
+    }
+
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "type", required = false) Integer selectedType, Model model) {
+        model.addAttribute("selectedType", selectedType);
+        return "login";
+    }
+
+    @GetMapping("/about")
+    public String about(Model model) {
+        model.addAttribute("user", usersService.getCurrentUserProfile());
+        return "about-us";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
+        return "redirect:/";
+    }
+}
