@@ -717,11 +717,13 @@
 
             .seeker-layout {
                 max-width: 1400px;
+                width: 100%;
                 margin: 0 auto;
                 display: grid;
                 grid-template-columns: 280px 1fr;
-                gap: 30px;
-                padding: 10px 30px 30px;
+                gap: 24px;
+                padding: 10px 20px 30px;
+                box-sizing: border-box;
             }
 
             /* SIDEBAR FILTERS */
@@ -1019,7 +1021,7 @@
 
             .seeker-jobs-container {
                 display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
                 gap: 20px;
             }
 

@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.DS_Store
+scratch/
+Job_Portal_Internal_Architecture_Guide.pdf
+DB_Scripts/02-sample-data.sql
+src/main/resources/data.sql
+photos/
