@@ -3,7 +3,7 @@
 
 **TalentTrack** is an enterprise-grade full-stack Job Portal web application built with **Spring Boot 3.3**, **Java 21**, **Spring Security 6**, **Spring Data JPA**, and **Thymeleaf**. It provides a seamless, dynamic platform bridging **Recruiters** and **Job Seekers** with real-time job searching, role-based dashboards, candidate application tracking, and profile/resume management.
 
-🌐 **Live Application URL**: [https://talentrack.up.railway.app](https://talentrack.up.railway.app)
+🌐 **Live Application URL**: [https://talenttrack.up.railway.app](https://talenttrack.up.railway.app)
 
 
 
@@ -130,7 +130,7 @@ docker run -p 8080:8080 talenttrack-job-portal:latest
 ## 🌐 Live Cloud Deployment
 
 This project is deployed live on **Railway**:
-- **Live URL**: [https://talentrack.up.railway.app](https://talentrack.up.railway.app)
+- **Live URL**: [https://talenttrack.up.railway.app](https://talenttrack.up.railway.app)
 
 ---
 
