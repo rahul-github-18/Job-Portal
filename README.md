@@ -1,11 +1,5 @@
 # 🚀 TalentTrack - Modern Job Portal Platform
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-talentrack.up.railway.app-00DC82?style=for-the-badge&logo=railway&logoColor=white)](https://talentrack.up.railway.app)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3.0-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
-[![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
-[![Spring Security](https://img.shields.io/badge/Spring_Security-6.0-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
-[![Database](https://img.shields.io/badge/Database-MySQL_/_PostgreSQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![License](https://img.shields.io/badge/License-MIT-blue.style=for-the-badge)](LICENSE)
 
 **TalentTrack** is an enterprise-grade full-stack Job Portal web application built with **Spring Boot 3.3**, **Java 21**, **Spring Security 6**, **Spring Data JPA**, and **Thymeleaf**. It provides a seamless, dynamic platform bridging **Recruiters** and **Job Seekers** with real-time job searching, role-based dashboards, candidate application tracking, and profile/resume management.
 
@@ -152,7 +146,4 @@ This project is deployed live on **Railway**:
 
 ---
 
-## 📄 License & Acknowledgments
 
-This project is open-source and available under the [MIT License](LICENSE).  
-Built with ❤️ using Spring Boot & Java 21.
