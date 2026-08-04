@@ -2108,3 +2108,204 @@ body.home_page .view_all_btn:hover {
   .hero_stats { flex-direction: column; gap: 30px; }
   .footer_bottom { flex-direction: column; gap: 16px; text-align: center; }
 }
+
+/* ==========================================================================
+   MOBILE & TABLET FULL RESPONSIVENESS ENHANCEMENTS
+   ========================================================================== */
+
+body {
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Tablet & Mobile Breakpoints (max-width: 992px) */
+@media (max-width: 992px) {
+  .main_div {
+    padding: 10px 16px !important;
+    height: auto !important;
+    min-height: 60px !important;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .site_logo {
+    max-width: 170px !important;
+    height: auto;
+  }
+
+  .home_nav_links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    overflow-x: auto;
+    padding: 6px 0;
+    gap: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .home_nav_search {
+    max-width: 100% !important;
+    min-width: 100% !important;
+    grid-template-columns: 1fr;
+    border-radius: 8px;
+    gap: 8px;
+    padding: 8px;
+    background: white;
+  }
+
+  .home_nav_search input {
+    border-right: none !important;
+    border-bottom: 1px solid #e2e8f0;
+    height: 44px;
+  }
+
+  .home_nav_search button {
+    width: 100%;
+    border-radius: 6px;
+    height: 46px;
+  }
+
+  .col-md-3, .col-lg-3, .col-md-9, .col-lg-9 {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+  }
+
+  .myForm {
+    margin-bottom: 24px !important;
+    width: 100% !important;
+  }
+
+  .job_card, .job-post-card {
+    width: 100% !important;
+  }
+}
+
+/* Mobile Breakpoints (max-width: 768px) */
+@media (max-width: 768px) {
+  .main_div {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px !important;
+  }
+
+  .logo_left {
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  .logo_right {
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .header_action_btn {
+    flex: 1 1 auto;
+    min-height: 42px;
+    font-size: 13px;
+    padding: 0 12px;
+    justify-content: center;
+  }
+
+  .premium_hero {
+    padding: 40px 16px !important;
+    text-align: center;
+  }
+
+  .premium_hero h1 {
+    font-size: 28px !important;
+    line-height: 1.3 !important;
+  }
+
+  .premium_hero p {
+    font-size: 15px !important;
+  }
+
+  .premium_search {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 14px !important;
+  }
+
+  .premium_jobs {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .hero_stats {
+    flex-direction: column !important;
+    gap: 20px !important;
+  }
+
+  .box, .auth_card, .login_form, .register_form {
+    width: 95% !important;
+    max-width: 480px !important;
+    margin: 20px auto !important;
+    padding: 20px 16px !important;
+  }
+
+  .job_details_container, .profile_container {
+    padding: 16px !important;
+    margin: 10px auto !important;
+  }
+
+  .table-responsive, table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .footer_grid {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+    text-align: center;
+  }
+
+  .footer_brand p {
+    margin: 12px auto 0 !important;
+  }
+
+  .footer_socials {
+    justify-content: center !important;
+  }
+
+  .footer_bottom {
+    flex-direction: column !important;
+    gap: 12px !important;
+    text-align: center !important;
+  }
+}
+
+/* Extra Small Screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .site_logo {
+    max-width: 140px !important;
+  }
+
+  .home_nav_link span {
+    font-size: 12px;
+  }
+
+  .header_action_btn {
+    font-size: 12px;
+    padding: 0 8px;
+    min-height: 38px;
+  }
+
+  .card_job_title {
+    font-size: 15px !important;
+  }
+
+  .btn, button, .header_action_btn {
+    touch-action: manipulation;
+  }
+}
+
