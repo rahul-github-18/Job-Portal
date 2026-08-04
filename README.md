@@ -5,19 +5,7 @@
 
 🌐 **Live Application URL**: [https://talentrack.up.railway.app](https://talentrack.up.railway.app)
 
----
 
-## 📸 Screenshots & UI Showcase
-
-| 🏠 Home Page & Landing View | 🔍 Global Job Search & Filters |
-| :---: | :---: |
-| ![Home Page](photos/homepage_screenshot.png) | ![Job Search](photos/search_screenshot.png) |
-
-| 🔐 User Authentication & Access Control | 📊 Candidate & Recruiter Dashboards |
-| :---: | :---: |
-| ![Login Page](photos/login_screenshot.png) | ![Recruiter Portal](photos/dashboard_screenshot.png) |
-
----
 
 ## ✨ Key Features & Capabilities
 
