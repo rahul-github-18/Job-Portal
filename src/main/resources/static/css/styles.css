@@ -68,9 +68,9 @@ a.primary {
 
 .main_div {
   width: 100% !important;
-  min-height: 72px !important;
+  min-height: 62px !important;
   margin: 0 !important;
-  padding: 0 28px !important;
+  padding: 0 24px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,9 +92,9 @@ a.primary {
 }
 
 .site_logo {
-  height: 48px !important;
+  height: 34px !important;
   width: auto !important;
-  max-width: 260px !important;
+  max-width: 190px !important;
   object-fit: contain !important;
   display: block !important;
   transform: none !important;
@@ -102,9 +102,9 @@ a.primary {
 
 .auth_logo,
 .navbar_logo {
-  height: 48px !important;
+  height: 34px !important;
   width: auto !important;
-  max-width: 260px !important;
+  max-width: 190px !important;
   object-fit: contain !important;
   display: block !important;
   transform: none !important;
@@ -709,9 +709,9 @@ body.home_page {
 }
 
 .site_logo {
-  height: 48px !important;
+  height: 34px !important;
   width: auto !important;
-  max-width: 260px !important;
+  max-width: 190px !important;
   object-fit: contain !important;
   object-position: left center;
   transform: none !important;
@@ -2205,8 +2205,8 @@ iframe {
   .site_logo,
   .auth_logo,
   .navbar_logo {
-    height: 42px !important;
-    max-width: 220px !important;
+    height: 30px !important;
+    max-width: 160px !important;
     transform: none !important;
   }
 
@@ -2271,8 +2271,8 @@ iframe {
   .site_logo,
   .auth_logo,
   .navbar_logo {
-    height: 36px !important;
-    max-width: 180px !important;
+    height: 27px !important;
+    max-width: 140px !important;
   }
 
   .header_action_btn {
@@ -2367,8 +2367,8 @@ iframe {
   .site_logo,
   .auth_logo,
   .navbar_logo {
-    height: 32px !important;
-    max-width: 150px !important;
+    height: 24px !important;
+    max-width: 120px !important;
   }
 
   .home_nav_link span {
