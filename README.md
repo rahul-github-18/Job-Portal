@@ -5,7 +5,23 @@
 
 🌐 **Live Application URL**: [https://talenttrack.up.railway.app](https://talenttrack.up.railway.app)
 
+---
 
+## 📸 Application Screenshots
+
+### 🏠 Home Page
+![Home Page](./pictures/home_page.png)
+
+### 🔑 Login Page
+![Login Page](./pictures/login_page.png)
+
+### 🏢 Recruiter Dashboard
+![Recruiter Dashboard](./pictures/recruiter_dashboard.png)
+
+### 💼 Job Seeker Dashboard
+![Job Seeker Dashboard](./pictures/job_seeker_dashboard.png)
+
+---
 
 ## ✨ Key Features & Capabilities
 
