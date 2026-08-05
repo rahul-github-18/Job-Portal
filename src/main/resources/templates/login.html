@@ -126,11 +126,10 @@
             color: white;
         }
 
-       .site_logo {
-
+        .auth_card_logo {
             width: 210px;
+            height: auto;
             object-fit: contain;
-
             margin-bottom: 10px;
         }
 
@@ -391,53 +390,52 @@
         /* RESPONSIVE */
 
         @media (max-width: 992px) {
-
             body {
-
                 overflow: auto;
-                padding: 16px;
+            }
+
+            body.auth_with_nav .login-container {
+                margin: 24px auto;
+                width: calc(100% - 32px);
             }
 
             .login-container {
-
                 grid-template-columns: 1fr;
                 min-height: auto;
+                border-radius: 16px;
             }
 
             .login-left {
-
                 display: none;
             }
 
             .login-right {
-
-                padding: 35px 25px;
+                padding: 30px 24px;
             }
 
             .login-title {
-
-                font-size: 38px;
+                font-size: 32px;
             }
         }
 
         @media (max-width: 576px) {
+            body.auth_with_nav .login-container {
+                margin: 16px auto;
+                width: calc(100% - 24px);
+            }
 
             .login-right {
-
-                padding: 28px 20px;
+                padding: 24px 18px;
             }
 
             .login-title {
-
-                font-size: 32px;
+                font-size: 26px;
             }
 
             .login-options {
-
                 flex-direction: column;
                 align-items: flex-start;
-
-                gap: 12px;
+                gap: 10px;
             }
         }
 
@@ -458,7 +456,7 @@
 
             <img th:src="@{/assets/logo.png}"
                  alt="TalentTrack Logo"
-                 class="site_logo"/>
+                 class="auth_card_logo"/>
 
             <h1>
                 Find Your <br>

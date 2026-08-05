@@ -463,9 +463,20 @@
             }
 
             @media (max-width: 992px) {
-                .recruiter-layout { grid-template-columns: 1fr; }
+                .recruiter-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; }
                 .recruiter-sidebar { position: relative; top: 0; }
+                .recruiter-menu { flex-direction: row; flex-wrap: wrap; }
+                .recruiter-menu-item { flex: 1 1 auto; justify-content: center; padding: 10px 14px; font-size: 13.5px; }
                 .job-card-footer { flex-direction: column; gap: 15px; align-items: flex-start; }
+                .recruiter-action-bar { flex-direction: column; gap: 12px; }
+                .recruiter-add-btn { width: 100%; justify-content: center; }
+            }
+
+            @media (max-width: 640px) {
+                .recruiter-stats-grid { grid-template-columns: 1fr; }
+                .recruiter-stat-card { padding: 16px; gap: 14px; }
+                .recruiter-analytics-box { padding: 18px; }
+                .chart-container { height: 260px; }
             }
         </style>
 
@@ -1237,13 +1248,21 @@
             }
 
             @media (max-width: 992px) {
-                .seeker-layout { grid-template-columns: 1fr; }
+                .seeker-layout { grid-template-columns: 1fr; padding: 15px; gap: 20px; }
                 .seeker-sidebar { position: relative; top: 0; }
                 .seeker-search-form { flex-direction: column; }
                 .btn-seeker-search { width: 100%; justify-content: center; }
-                .seeker-stats-grid { grid-template-columns: 1fr; }
+                .seeker-stats-grid { grid-template-columns: repeat(2, 1fr); }
                 .seeker-jobs-container { grid-template-columns: 1fr; }
-                .seeker-job-footer { flex-direction: row; gap: 8px; align-items: center; }
+                .seeker-job-footer { flex-wrap: wrap; gap: 10px; align-items: center; }
+            }
+
+            @media (max-width: 640px) {
+                .seeker-stats-grid { grid-template-columns: 1fr; }
+                .seeker-job-card { padding: 18px; }
+                .seeker-job-footer { flex-direction: column; align-items: stretch; gap: 10px; }
+                .seeker-job-actions { width: 100%; display: flex; gap: 8px; }
+                .btn-view-details, .btn-apply-now { flex: 1; text-align: center; justify-content: center; }
             }
         </style>
 

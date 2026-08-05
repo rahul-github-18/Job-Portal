@@ -124,11 +124,10 @@
             color: white;
         }
 
-        .site_logo {
-
+        .auth_card_logo {
             width: 210px;
+            height: auto;
             object-fit: contain;
-
             margin-bottom: 10px;
         }
 
@@ -342,45 +341,46 @@
         /* RESPONSIVE */
 
         @media (max-width: 992px) {
-
             body {
-
                 overflow: auto;
-                padding: 16px;
+            }
+
+            body.auth_with_nav .register-container {
+                margin: 24px auto;
+                width: calc(100% - 32px);
             }
 
             .register-container {
-
                 grid-template-columns: 1fr;
                 min-height: auto;
+                border-radius: 16px;
             }
 
             .register-left {
-
                 display: none;
             }
 
             .register-right {
-
-                padding: 35px 25px;
+                padding: 30px 24px;
             }
 
             .register-title {
-
-                font-size: 38px;
+                font-size: 32px;
             }
         }
 
         @media (max-width: 576px) {
+            body.auth_with_nav .register-container {
+                margin: 16px auto;
+                width: calc(100% - 24px);
+            }
 
             .register-right {
-
-                padding: 28px 20px;
+                padding: 24px 18px;
             }
 
             .register-title {
-
-                font-size: 32px;
+                font-size: 26px;
             }
         }
 
@@ -401,7 +401,7 @@
 
             <img th:src="@{/assets/logo.png}"
                  alt="TalentTrack Logo"
-                 class="site_logo"/>
+                 class="auth_card_logo"/>
 
             <h1>
                 Build Your <br>
