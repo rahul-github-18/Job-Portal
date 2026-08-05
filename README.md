@@ -134,4 +134,9 @@ This project is deployed live on **Railway**:
 
 ---
 
+## 👤 Author
+
+**Rahul Ranjan**
+- 🌐 Portfolio: [https://rahulspace.vercel.app/](https://rahulspace.vercel.app/)
+- 💼 LinkedIn: [https://www.linkedin.com/in/rahul-ranjan-6b2ab424a/](https://www.linkedin.com/in/rahul-ranjan-6b2ab424a/)
 
