@@ -9,17 +9,28 @@
 
 ## 📸 Application Screenshots
 
-### 🏠 Home Page
-![Home Page](./pictures/home_page.png)
-
-### 🔑 Login Page
-![Login Page](./pictures/login_page.png)
-
-### 🏢 Recruiter Dashboard
-![Recruiter Dashboard](./pictures/recruiter_dashboard.png)
-
-### 💼 Job Seeker Dashboard
-![Job Seeker Dashboard](./pictures/job_seeker_dashboard.png)
+<table width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <h4>🏠 Home Page</h4>
+      <img src="./pictures/home_page.png" alt="Home Page" width="100%"/>
+    </td>
+    <td width="50%" align="center">
+      <h4>🔑 Login Page</h4>
+      <img src="./pictures/login_page.png" alt="Login Page" width="100%"/>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <h4>🏢 Recruiter Dashboard</h4>
+      <img src="./pictures/recruiter_dashboard.png" alt="Recruiter Dashboard" width="100%"/>
+    </td>
+    <td width="50%" align="center">
+      <h4>💼 Job Seeker Dashboard</h4>
+      <img src="./pictures/job_seeker_dashboard.png" alt="Job Seeker Dashboard" width="100%"/>
+    </td>
+  </tr>
+</table>
 
 ---
 
