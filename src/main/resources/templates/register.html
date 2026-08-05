@@ -264,6 +264,13 @@
             font-size: 14px;
         }
 
+        .eye-icon {
+
+            left: auto !important;
+            right: 16px;
+            cursor: pointer;
+        }
+
         .input-box input,
         .input-box select {
 
@@ -535,6 +542,8 @@
                         required
                 >
 
+                <i class="fa fa-eye eye-icon"></i>
+
             </div>
 
             <!-- USER TYPE -->
@@ -601,6 +610,28 @@
 <script
         type="text/javascript"
         th:src="@{/webjars/bootstrap/js/bootstrap.min.js}">
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const eyeIcons = document.querySelectorAll(".eye-icon");
+        eyeIcons.forEach(function (icon) {
+            icon.addEventListener("click", function () {
+                const input = this.parentElement.querySelector("input");
+                if (input) {
+                    if (input.type === "password") {
+                        input.type = "text";
+                        this.classList.remove("fa-eye");
+                        this.classList.add("fa-eye-slash");
+                    } else {
+                        input.type = "password";
+                        this.classList.remove("fa-eye-slash");
+                        this.classList.add("fa-eye");
+                    }
+                }
+            });
+        });
+    });
 </script>
 
 </html>
